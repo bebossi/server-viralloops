@@ -13,24 +13,20 @@ export class UserController {
       const { password, email } = req.body;
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      if (req.currentUser) {
-        const user = await prisma.user.update({
-          where: {
-            id: req.currentUser.id,
-          },
-          data: {
-            email,
-            password: hashedPassword,
-          },
-        });
-        return res.status(200).json(user);
-      }
-
       const newUser = await prisma.user.create({
         data: {
           email,
           password: hashedPassword,
         },
+      });
+      const token = generateToken(newUser);
+
+      
+      res.cookie("token", token, {
+        httpOnly: true,
+        // secure: true,
+        // path: "/",
+        // sameSite: "none",
       });
 
 
