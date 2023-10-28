@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+id String @id @default(uuid())
+firstName String? 
+lastName String?
+email String @unique
+password String
+createdAt DateTime @default(now())
+updatedAt DateTime @default(now())
+
+formWidgets FormWidget[]
+}
+
+model FormWidget {
+  id              String    @id @default(uuid())
+  elements        Element[]
+  backgroundColor String?
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}
+
+model FieldType {
+  id      String    @id @default(uuid())
+  name    String    @unique
+  element Element[]
+}
+
+model Element {
+  id              String   @id @default(uuid())
+  label           String?
+  fontSize        String?
+  fontFamily      String?
+  bold            Boolean?
+  underline       Boolean?
+  fontColor       String?
+  backgroundColor String?
+  borderRadius    String?
+  isRequired      Boolean?
+  showInput       Boolean?
+  dropdownOptions DropdownOption[]
+
+  typeElementName String
+  formWidgetId    String
+  typeElement FieldType  @relation(fields: [typeElementName], references: [name])
+  formWidget  FormWidget @relation(fields: [formWidgetId], references: [id])
+}
+
+model DropdownOption {
+  id    String @id @default(uuid())
+  label String?
+  show  Boolean?
+  elementId String
+  element Element @relation(fields: [elementId], references: [id])
+}
