@@ -21,14 +21,12 @@ export class UserController {
       });
       const token = generateToken(newUser);
 
-      
       res.cookie("token", token, {
         httpOnly: true,
         // secure: true,
         // path: "/",
         // sameSite: "none",
       });
-
 
       return res.status(200).json(newUser);
     } catch (err) {
@@ -58,7 +56,6 @@ export class UserController {
       }
       const token = generateToken(user);
 
-      
       res.cookie("token", token, {
         httpOnly: true,
         // secure: true,

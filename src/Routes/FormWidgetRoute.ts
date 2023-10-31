@@ -6,7 +6,12 @@ import { authMiddleware } from "../middlewares/attachCurrentUser";
 const routes = Router();
 const formWidgetController = new FormWidgetController();
 
-routes.post("/formWidget",isAuth, authMiddleware, formWidgetController.createWidget);
+routes.post(
+  "/formWidget",
+  isAuth,
+  authMiddleware,
+  formWidgetController.createWidget
+);
 routes.post("/elementTypes", formWidgetController.createElementTypes);
-routes.get("/widgets/:id",isAuth, authMiddleware, formWidgetController.getFormWidget);
+routes.get("/widgets/:id", formWidgetController.getFormWidget);
 export default routes;
